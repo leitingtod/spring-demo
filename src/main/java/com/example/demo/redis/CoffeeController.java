@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.redis;
 
 import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.web.bind.annotation.GetMapping;
