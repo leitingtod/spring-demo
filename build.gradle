@@ -30,6 +30,10 @@ repositories {
 
 
 dependencies {
+    compile 'org.springframework.security:spring-security-web:5.1.0.RELEASE'
+    compile 'org.springframework.security:spring-security-config:5.1.0.RELEASE'
+    compile('org.springframework.boot:spring-boot-starter-web')
+
     compile('org.springframework.boot:spring-boot-starter-data-redis-reactive')
     compile("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
@@ -41,4 +45,8 @@ dependencies {
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('io.projectreactor:reactor-test')
+}
+
+compileJava {
+    options.deprecation = false
 }
