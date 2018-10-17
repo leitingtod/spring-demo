@@ -1,7 +1,9 @@
 package com.example.demo.redis;
 
+import com.github.caryyu.spring.embedded.redisserver.RedisServerConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -11,7 +13,14 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class CoffeeConfiguration {
+
+    @Bean("RedisServerConfiguration")
+    public RedisServerConfiguration redisServerConfiguration(){
+        return new RedisServerConfiguration();
+    }
+
     @Bean
+    @DependsOn("RedisServerConfiguration")
     ReactiveRedisOperations<String, Coffee> redisOperations(ReactiveRedisConnectionFactory factory) {
         Jackson2JsonRedisSerializer<Coffee> serializer = new Jackson2JsonRedisSerializer<>(Coffee.class);
 

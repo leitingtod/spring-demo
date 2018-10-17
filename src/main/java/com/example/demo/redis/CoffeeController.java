@@ -13,7 +13,7 @@ public class CoffeeController {
         this.coffeeOps = coffeeOps;
     }
 
-    @GetMapping("/coffees")
+    @GetMapping("/redis/coffee/list")
     public Flux<Coffee> all() {
         return coffeeOps.keys("*")
                 .flatMap(coffeeOps.opsForValue()::get);

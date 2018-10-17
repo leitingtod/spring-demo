@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping(path = "/mongo")
 public class PersonController {
 
     private final PersonRepository personRepository;
