@@ -38,6 +38,8 @@ configurations {
 dependencies {
     compile('cglib:cglib:3.2.8')
 
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
     compile('org.springframework.boot:spring-boot-starter-data-redis-reactive')
     compile('com.github.caryyu:spring-embedded-redis-server:1.1')
 

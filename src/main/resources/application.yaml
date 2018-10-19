@@ -23,3 +23,11 @@ logging:
     org.hibernate: ERROR
     com.example.demo.mysql: DEBUG
 
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"
