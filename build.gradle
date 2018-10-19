@@ -28,6 +28,12 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
 
 dependencies {
     compile('cglib:cglib:3.2.8')
@@ -48,6 +54,8 @@ dependencies {
 
     compile('org.springframework.boot:spring-boot-starter-webflux')
     compileOnly('org.projectlombok:lombok')
+
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('io.projectreactor:reactor-test')

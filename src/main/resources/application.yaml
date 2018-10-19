@@ -12,8 +12,14 @@ spring:
     port: 6379
     embedded: true
 
+mybatis:
+  type-aliases-package: com.example.demo.mysql
+
+
 logging:
   level:
     root: WARN
     springframework.web: DEBUG
     org.hibernate: ERROR
+    com.example.demo.mysql: DEBUG
+
