@@ -1,6 +1,7 @@
 package com.example.demo.upload;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-//@RequestMapping(path = "/upload")
+@RequestMapping(path = "/upload")
 public class FileUploadController {
 
     private final StorageService storageService;
@@ -25,7 +26,7 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public String listUploadedFiles(Model model) throws IOException {
 
         model.addAttribute("files", storageService.loadAll().map(
@@ -45,15 +46,27 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+    @PostMapping("")
+    public String handleFileUpload(@RequestParam("files") MultipartFile[] files,
                                    RedirectAttributes redirectAttributes) {
+        StringBuilder message = new StringBuilder();
 
-        storageService.store(file);
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
+        try {
+            for (int i = 0; i < files.length; i++) {
+                storageService.store(files[i]);
+                message.append(files[i].getOriginalFilename());
+                if (i < files.length - 1) {
+                    message.append(", ");
+                }
+            }
+            redirectAttributes.addFlashAttribute("message",
+                    "You successfully uploaded " + message.toString() + "!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Nothing to upload!");
+        }
 
-        return "redirect:/";
+        return "redirect:/upload";
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
