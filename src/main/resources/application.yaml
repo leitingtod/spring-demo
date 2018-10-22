@@ -12,6 +12,12 @@ spring:
     port: 6379
     embedded: true
 
+  servlet:
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 2048MB
+      enabled: true
+
 mybatis:
   type-aliases-package: com.example.demo.mysql
 
