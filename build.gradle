@@ -57,7 +57,8 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 
     compile('org.springframework.boot:spring-boot-starter-webflux')
-    compileOnly('org.projectlombok:lombok')
+    compileOnly('org.projectlombok:lombok:1.18.2')
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
