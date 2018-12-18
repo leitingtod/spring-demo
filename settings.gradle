@@ -1,2 +1,4 @@
 rootProject.name = 'spring'
 include('demo')
+include('dubbo-provider')
+include('dubbo-consumer')
