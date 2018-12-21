@@ -1,5 +1,6 @@
-package com.example.demo.rbac;
+package com.example.demo;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class User {
@@ -7,6 +8,7 @@ public class User {
     private String name;
     private String password;
     private String email;
+    private BigDecimal account;
     private Timestamp createTime;
 
     public Long getId() {
@@ -41,6 +43,14 @@ public class User {
         this.email = email;
     }
 
+    public BigDecimal getAccount() {
+        return account;
+    }
+
+    public void setAccount(BigDecimal account) {
+        this.account = account;
+    }
+
     public Timestamp getCreateTime() {
         return createTime;
     }
@@ -56,6 +66,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", account=" + account +
                 ", createTime=" + createTime +
                 '}';
     }

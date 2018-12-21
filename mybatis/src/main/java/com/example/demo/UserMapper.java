@@ -1,7 +1,8 @@
-package com.example.demo.rbac;
+package com.example.demo;
 
 import org.apache.ibatis.annotations.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
@@ -28,6 +29,12 @@ public interface UserMapper {
 
     @Update("update rbac_user set name=#{name}, password=#{password}, email=#{email} where id=#{id}")
     int update(User user);
+
+    @Update("update rbac_user set password=#{password} where id=#{id}")
+    int updatePassword(String password, Long id);
+
+    @Update("update rbac_user set account=#{account} where id=#{id}")
+    int updateAccount(@Param("account") BigDecimal account, @Param("id")Long id);
 
     @Update("delete from rbac_user where id=#{id}")
     int delete(Long id);
