@@ -2,6 +2,8 @@ package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -27,23 +29,19 @@ public class UserRepository {
         return userMapper.findById(id);
     }
 
-    //@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_UNCOMMITTED)
-    @Transactional
-    public void updateAccount(BigDecimal account, long id, int delay) throws Exception {
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+    public void updateAccount(double amount, long id, int delay) throws Exception {
 //        applicationEventPublisher.publishEvent(new MyEvent("TL", delay));
-
-        double delta = userMapper.findById(id).getAccount().doubleValue() + account.doubleValue();
-        if (delta >= 0.00) {
-            try {
-                System.out.printf("--->>  ------- %s ---------------------\n", delay);
-                userMapper.updateAccount(BigDecimal.valueOf(delta), id);
-                Thread.sleep(delay); // 延时提交
-                System.out.printf("===>>  ======= %s =====================\n", delay);
-            } catch (Exception e) {
-                throw new RuntimeException("update failed: " + delay);
-            }
-        } else {
-            throw new RuntimeException("余额不足...");
+        try {
+            System.out.printf("--->>  ------- %s ---------------------\n", delay);
+            User user = userMapper.findById(id);
+            user.setAccount(BigDecimal.valueOf(user.getAccount().doubleValue()+amount));
+            System.out.printf("===>>  ======= %s =====================\n", user);
+            userMapper.updateAccount(user);
+            Thread.sleep(delay); // 延时提交
+            System.out.printf("===>>  ======= %s =====================\n", delay);
+        } catch (Exception e) {
+            throw new RuntimeException("update failed: " + delay);
         }
 
         /*

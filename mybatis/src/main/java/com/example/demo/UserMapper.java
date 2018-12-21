@@ -33,8 +33,8 @@ public interface UserMapper {
     @Update("update rbac_user set password=#{password} where id=#{id}")
     int updatePassword(String password, Long id);
 
-    @Update("update rbac_user set account=#{account} where id=#{id}")
-    int updateAccount(@Param("account") BigDecimal account, @Param("id")Long id);
+    @Update("update rbac_user set account=#{account}, version=#{version}+1 where id=#{id} and version=#{version}")
+    int updateAccount(User user);
 
     @Update("delete from rbac_user where id=#{id}")
     int delete(Long id);
