@@ -2,7 +2,6 @@ package com.example.demo;
 
 import org.apache.ibatis.annotations.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
