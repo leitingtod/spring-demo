@@ -15,10 +15,10 @@ import java.util.concurrent.TimeUnit;
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public DemoApplication(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public DemoApplication(UserService userService) {
+        this.userService = userService;
     }
 
     public void test() {
@@ -44,9 +44,9 @@ public class DemoApplication implements CommandLineRunner {
                 es.execute(() -> {
                     // 同步（模拟单机情况，但跨机无法做到同步）100 并发请求
                     // 0 - 872ms/100%
-                    synchronized (userRepository) {
+                    synchronized (userService) {
                         try {
-                            userRepository.updateAccount(1L, 1, 0);
+                            userService.updateAccount(1L, 1, 0);
                         } catch (Exception e) {
                             System.out.println(e.toString());
                         }

@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -10,16 +11,16 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class UserRepository {
+public class UserService {
     @SuppressWarnings("all")
     @Autowired
     private UserMapper userMapper;
 
-//    private final ApplicationEventPublisher applicationEventPublisher;
-//
-//    public UserService(ApplicationEventPublisher applicationEventPublisher) {
-//        this.applicationEventPublisher = applicationEventPublisher;
-//    }
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public UserService(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
 
     public List<User> getAll() {
         return userMapper.findAll();
@@ -31,7 +32,7 @@ public class UserRepository {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
     public void updateAccount(double amount, long id, int delay) throws Exception {
-//        applicationEventPublisher.publishEvent(new MyEvent("TL", delay));
+//        applicationEventPublisher.publishEvent(new MyEventListener("TL", delay));
         try {
             System.out.printf("--->>  ------- %s ---------------------\n", delay);
             User user = userMapper.findById(id);
