@@ -24,12 +24,13 @@ repositories {
 }
 
 dependencies {
-    implementation(':dubbo-provider')
+    implementation project(':dubbo-provider')
 
     implementation('com.alibaba.boot:dubbo-spring-boot-starter:0.2.0')
-    implementation('com.alibaba:dubbo:2.6.2')
-    implementation('com.alibaba:spring:spring-context-support:1.0.2')
+    implementation('com.alibaba:dubbo:2.6.5')
+    implementation('com.alibaba.spring:spring-context-support:1.0.2')
 
+    implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
