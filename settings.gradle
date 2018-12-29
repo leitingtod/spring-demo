@@ -1,3 +1,4 @@
 rootProject.name = 'spring'
 include('demo')
 include('mybatis')
+include('leetcode')
