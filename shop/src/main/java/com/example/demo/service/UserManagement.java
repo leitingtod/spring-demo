@@ -7,6 +7,7 @@ import com.example.demo.exceptions.PasswordWeakException;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-/**
- * Created by lto on 25/02/16.
- */
+@Slf4j
 @Service
 @ConfigurationProperties
 public class UserManagement implements com.example.demo.interfaces.UserManagement {
@@ -43,8 +42,6 @@ public class UserManagement implements com.example.demo.interfaces.UserManagemen
     @Autowired
     @Qualifier("customUserDetailsService")
     private UserDetailsManager customUserDetailsService;
-
-    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public User add(User user) throws PasswordWeakException, BadRequestException {
@@ -106,7 +103,6 @@ public class UserManagement implements com.example.demo.interfaces.UserManagemen
         return userToUpdate;
     }
 
-    @Override
     public Iterable<User> query() {
         log.trace("Listing users");
         return userRepository.findAll();

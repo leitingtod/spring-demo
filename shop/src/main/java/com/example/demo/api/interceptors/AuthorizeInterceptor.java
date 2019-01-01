@@ -90,6 +90,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter {
         BaseUser baseUser;
         try {
             baseUser = userManagement.queryByName(currentUserName);
+            return true;
         } catch (NotFoundException e) {
             log.trace("User not found for name: " + currentUserName);
         }

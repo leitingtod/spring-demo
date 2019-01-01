@@ -8,36 +8,45 @@ import com.example.demo.model.User;
 
 public interface UserManagement {
 
-  /** @param user */
-  User add(User user) throws PasswordWeakException, BadRequestException;
+    /**
+     * @param user
+     */
+    User add(User user) throws PasswordWeakException, BadRequestException;
 
-  /** @param user */
-  void delete(User user);
+    /**
+     * @param user
+     */
+    void delete(User user);
 
-  /** @param new_user */
-  User update(User new_user) throws NotAllowedException, BadRequestException, NotFoundException;
+    /**
+     * @param newUser
+     */
+    User update(User newUser) throws NotAllowedException, BadRequestException, NotFoundException;
 
-  /** */
-  Iterable<User> query();
+    /**
+     * Iterable<User> query();
+     *
+     * @param username
+     */
+    User queryByName(String username) throws NotFoundException;
 
-  /** @param username */
-  User queryByName(String username) throws NotFoundException;
+    /**
+     * @param id
+     */
+    User query(String id) throws NotFoundException;
 
-  /** @param id */
-  User query(String id) throws NotFoundException;
+    /**
+     * @param oldPwd
+     * @param newPwd
+     */
+    void changePassword(String oldPwd, String newPwd) throws PasswordWeakException;
 
-  /**
-   * @param oldPwd
-   * @param newPwd
-   */
-  void changePassword(String oldPwd, String newPwd) throws PasswordWeakException;
+    /**
+     * @param userName
+     * @param newPwd
+     */
+    User changePasswordOf(String userName, String newPwd)
+            throws PasswordWeakException, NotFoundException;
 
-  /**
-   * @param userName
-   * @param newPwd
-   */
-  User changePasswordOf(String userName, String newPwd)
-      throws PasswordWeakException, NotFoundException;
-
-  User getCurrentUser() throws NotFoundException;
+    User getCurrentUser() throws NotFoundException;
 }
