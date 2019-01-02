@@ -11,12 +11,12 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 @Configuration
 public class SecurityConfigurationGson {
 
-  @Bean
-  @Scope("prototype")
-  Gson gson() {
-    return new GsonBuilder()
-        .setPrettyPrinting()
-        .registerTypeAdapter(OAuth2AccessToken.class, new GsonSerializerOAuth2AccessToken())
-        .create();
-  }
+    @Bean
+    @Scope("prototype")
+    Gson gson() {
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(OAuth2AccessToken.class, new GsonSerializerOAuth2AccessToken())
+                .create();
+    }
 }

@@ -1,11 +1,10 @@
 package com.example.demo.model;
 
+import java.util.Date;
+import javax.persistence.*;
+import javax.persistence.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.persistence.Column;
-import javax.persistence.*;
-import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -36,4 +35,3 @@ public class Post extends BaseEntity {
                 + super.toString();
     }
 }
-

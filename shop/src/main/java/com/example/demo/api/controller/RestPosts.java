@@ -7,26 +7,21 @@ import com.example.demo.exceptions.PasswordWeakException;
 import com.example.demo.interfaces.PostManagement;
 import com.example.demo.model.Post;
 import com.google.gson.Gson;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
-
 
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/posts")
 public class RestPosts {
-    @Autowired
-    private PostManagement postManagement;
+    @Autowired private PostManagement postManagement;
 
-    @Autowired
-    private Gson gson;
+    @Autowired private Gson gson;
 
     @RequestMapping(
             method = RequestMethod.POST,
@@ -34,7 +29,8 @@ public class RestPosts {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Post create(@RequestBody @Valid Post post)
-            throws PasswordWeakException, NotAllowedException, BadRequestException, NotFoundException {
+            throws PasswordWeakException, NotAllowedException, BadRequestException,
+                    NotFoundException {
         log.info("Adding post: " + post.getTitle());
         postManagement.add(post);
         return post;

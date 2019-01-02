@@ -7,9 +7,10 @@ import com.example.demo.exceptions.PasswordWeakException;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -36,8 +33,7 @@ public class UserManagement implements com.example.demo.interfaces.UserManagemen
     @Value("${shop.users.email.check:true}")
     private boolean checkEmail;
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
     @Autowired
     @Qualifier("customUserDetailsService")

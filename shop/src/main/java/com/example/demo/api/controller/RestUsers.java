@@ -9,6 +9,8 @@ import com.example.demo.model.User;
 import com.example.demo.service.UserManagement;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,18 +19,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/users")
 public class RestUsers {
 
-    @Autowired
-    private UserManagement userManagement;
-    @Autowired
-    private Gson gson;
+    @Autowired private UserManagement userManagement;
+    @Autowired private Gson gson;
 
     @RequestMapping(
             method = RequestMethod.POST,
@@ -37,7 +34,8 @@ public class RestUsers {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public User create(@RequestBody @Valid User user)
-            throws PasswordWeakException, NotAllowedException, BadRequestException, NotFoundException {
+            throws PasswordWeakException, NotAllowedException, BadRequestException,
+                    NotFoundException {
         log.info("Adding user: " + user.getUsername());
         if (isAdmin()) {
             user = userManagement.add(user);
@@ -51,14 +49,16 @@ public class RestUsers {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public void delete(@PathVariable("id") String id) throws NotAllowedException, NotFoundException {
+    public void delete(@PathVariable("id") String id)
+            throws NotAllowedException, NotFoundException {
         log.info("Removing user with id " + id);
         if (isAdmin()) {
             if (!userManagement.getCurrentUser().getId().equals(id)) {
                 User user = userManagement.query(id);
                 userManagement.delete(user);
             } else {
-                throw new NotAllowedException("You can't delete yourself. Please ask another admin.");
+                throw new NotAllowedException(
+                        "You can't delete yourself. Please ask another admin.");
             }
         } else {
             throw new NotAllowedException("Forbidden to delete a user");
@@ -98,7 +98,6 @@ public class RestUsers {
         log.trace("Found User: " + user);
         return user;
     }
-
 
     @RequestMapping(value = "current", method = RequestMethod.GET)
     public User findCurrentUser() throws NotFoundException {
@@ -141,7 +140,7 @@ public class RestUsers {
     public void changePasswordOf(
             @PathVariable("username") String username, @RequestBody /*@Valid*/ JsonObject newPwd)
             throws UnauthorizedUserException, PasswordWeakException, NotFoundException,
-            NotAllowedException {
+                    NotAllowedException {
         log.debug("Changing password of user " + username);
         if (isAdmin()) {
             JsonObject jsonObject = gson.fromJson(newPwd, JsonObject.class);

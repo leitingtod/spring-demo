@@ -8,19 +8,13 @@ import com.example.demo.model.User;
 
 public interface UserManagement {
 
-    /**
-     * @param user
-     */
+    /** @param user */
     User add(User user) throws PasswordWeakException, BadRequestException;
 
-    /**
-     * @param user
-     */
+    /** @param user */
     void delete(User user);
 
-    /**
-     * @param newUser
-     */
+    /** @param newUser */
     User update(User newUser) throws NotAllowedException, BadRequestException, NotFoundException;
 
     /**
@@ -30,9 +24,7 @@ public interface UserManagement {
      */
     User queryByName(String username) throws NotFoundException;
 
-    /**
-     * @param id
-     */
+    /** @param id */
     User query(String id) throws NotFoundException;
 
     /**

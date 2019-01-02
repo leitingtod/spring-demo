@@ -1,5 +1,11 @@
 package com.example.demo.security.config;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,99 +28,97 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
-import javax.annotation.PostConstruct;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 @Configuration
 @EnableAuthorizationServer
 @ConfigurationProperties
 public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-  public static final String RESOURCE_ID = "oauth2-server";
-  private Logger log = LoggerFactory.getLogger(this.getClass());
-  @Autowired
-  private AuthenticationManager authenticationManager;
+    public static final String RESOURCE_ID = "oauth2-server";
+    private Logger log = LoggerFactory.getLogger(this.getClass());
+    @Autowired private AuthenticationManager authenticationManager;
 
-  private TokenStore tokenStore = new InMemoryTokenStore();
+    private TokenStore tokenStore = new InMemoryTokenStore();
 
-  @Value("${shop.security.user.token.validity:1200}")
-  private int userTokenValidityDuration;
+    @Value("${shop.security.user.token.validity:1200}")
+    private int userTokenValidityDuration;
 
-  @Value("${shop.security.service.token.validity:31556952}")
-  private int serviceTokenValidityDuration;
+    @Value("${shop.security.service.token.validity:31556952}")
+    private int serviceTokenValidityDuration;
 
-  private DefaultTokenServices serviceTokenServices;
+    private DefaultTokenServices serviceTokenServices;
 
-  @PostConstruct
-  public void init() {
-    serviceTokenServices = new DefaultTokenServices();
-    serviceTokenServices.setSupportRefreshToken(true);
-    serviceTokenServices.setTokenStore(tokenStore);
-    serviceTokenServices.setAccessTokenValiditySeconds(serviceTokenValidityDuration);
-  }
+    @PostConstruct
+    public void init() {
+        serviceTokenServices = new DefaultTokenServices();
+        serviceTokenServices.setSupportRefreshToken(true);
+        serviceTokenServices.setTokenStore(tokenStore);
+        serviceTokenServices.setAccessTokenValiditySeconds(serviceTokenValidityDuration);
+    }
 
-  @Override
-  public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-    endpoints.authenticationManager(this.authenticationManager).tokenStore(this.tokenStore);
-  }
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        endpoints.authenticationManager(this.authenticationManager).tokenStore(this.tokenStore);
+    }
 
-  @Override
-  public void configure(ClientDetailsServiceConfigurer client) throws Exception {
-    client
-        .inMemory()
-        .withClient("GoShoppingClient")
-        .secret("{noop}secret")
-        .authorizedGrantTypes("refresh_token", "password")
-        .scopes("read", "write")
-        .accessTokenValiditySeconds(userTokenValidityDuration)
-        .resourceIds(RESOURCE_ID);
-  }
+    @Override
+    public void configure(ClientDetailsServiceConfigurer client) throws Exception {
+        client.inMemory()
+                .withClient("GoShoppingClient")
+                .secret("{noop}secret")
+                .authorizedGrantTypes("refresh_token", "password")
+                .scopes("read", "write")
+                .accessTokenValiditySeconds(userTokenValidityDuration)
+                .resourceIds(RESOURCE_ID);
+    }
 
-  /**
-   * Method for generating an OAuth2 token for services. The token's (and refresh token's) validity
-   * duration is longer than for normal users.
-   *
-   * @param serviceName
-   * @return the oauth2 service token
-   */
-  public OAuth2AccessToken getNewServiceToken(String serviceName) {
-    Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-    authorities.add(new SimpleGrantedAuthority("ADMIN"));
+    /**
+     * Method for generating an OAuth2 token for services. The token's (and refresh token's)
+     * validity duration is longer than for normal users.
+     *
+     * @param serviceName
+     * @return the oauth2 service token
+     */
+    public OAuth2AccessToken getNewServiceToken(String serviceName) {
+        Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority("ADMIN"));
 
-    Map<String, String> requestParameters = new HashMap<>();
-    Set<String> scope = new HashSet<>();
-    scope.add("write");
-    scope.add("read");
-    Set<String> resourceIds = new HashSet<>();
-    Set<String> responseTypes = new HashSet<>();
-    responseTypes.add("code");
-    Map<String, Serializable> extensionProperties = new HashMap<>();
+        Map<String, String> requestParameters = new HashMap<>();
+        Set<String> scope = new HashSet<>();
+        scope.add("write");
+        scope.add("read");
+        Set<String> resourceIds = new HashSet<>();
+        Set<String> responseTypes = new HashSet<>();
+        responseTypes.add("code");
+        Map<String, Serializable> extensionProperties = new HashMap<>();
 
-    OAuth2Request oAuth2Request =
-        new OAuth2Request(
-            requestParameters,
-            serviceName,
-            authorities,
-            true,
-            scope,
-            resourceIds,
-            null,
-            responseTypes,
-            extensionProperties);
+        OAuth2Request oAuth2Request =
+                new OAuth2Request(
+                        requestParameters,
+                        serviceName,
+                        authorities,
+                        true,
+                        scope,
+                        resourceIds,
+                        null,
+                        responseTypes,
+                        extensionProperties);
 
-    User userPrincipal =
-        new User(serviceName, "" + Math.random() * 1000, true, true, true, true, authorities);
+        User userPrincipal =
+                new User(
+                        serviceName,
+                        "" + Math.random() * 1000,
+                        true,
+                        true,
+                        true,
+                        true,
+                        authorities);
 
-    UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(userPrincipal, null, authorities);
-    OAuth2Authentication auth = new OAuth2Authentication(oAuth2Request, authenticationToken);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userPrincipal, null, authorities);
+        OAuth2Authentication auth = new OAuth2Authentication(oAuth2Request, authenticationToken);
 
-    OAuth2AccessToken token = serviceTokenServices.createAccessToken(auth);
-    log.trace("New Service token: " + token);
-    return token;
-  }
+        OAuth2AccessToken token = serviceTokenServices.createAccessToken(auth);
+        log.trace("New Service token: " + token);
+        return token;
+    }
 }

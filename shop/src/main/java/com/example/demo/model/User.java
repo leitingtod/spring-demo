@@ -1,22 +1,21 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Collection;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.*;
-import java.util.Collection;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @JsonIgnoreProperties(
         value = {
-                "accountNonExpired",
-                "accountNonLocked",
-                "credentialsNonExpired"
+            "accountNonExpired",
+            "accountNonLocked",
+            "credentialsNonExpired"
         }) // otherwise there are problems with the Json SchemaValidator
 public class User extends BaseUser implements UserDetails {
     @Column(unique = true)
@@ -66,4 +65,3 @@ public class User extends BaseUser implements UserDetails {
         return true;
     }
 }
-

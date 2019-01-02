@@ -4,6 +4,9 @@ import com.example.demo.exceptions.NotAllowedException;
 import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.BaseUser;
 import com.example.demo.service.UserManagement;
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +17,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 @Service
 public class AuthorizeInterceptor extends HandlerInterceptorAdapter {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private UserManagement userManagement;
+    @Autowired private UserManagement userManagement;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+    public boolean preHandle(
+            HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -79,9 +78,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean checkAuthorization(
-            HttpServletRequest request,
-            String currentUserName,
-            HttpServletResponse response)
+            HttpServletRequest request, String currentUserName, HttpServletResponse response)
             throws NotFoundException, NotAllowedException, IOException {
 
         log.trace("Current User: " + currentUserName);

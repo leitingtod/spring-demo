@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsManager).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(customUserDetailsManager)
+                .passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override
@@ -61,9 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new InMemoryUserDetailsManager(new Properties());
     }
 
+    @SuppressWarnings("unchecked")
     @Bean
-    public FilterRegistrationBean simpleCorsFilter() {
-        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+    public FilterRegistrationBean simpleCorsFilter() throws Exception {
+        UrlBasedCorsConfigurationSource corsConfigurationSource =
+                new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(false);
         corsConfiguration.addAllowedOrigin("*");
@@ -76,14 +79,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return bean;
     }
 
-    /** For enabling annotations like @PreAuthorize("hasAnyRole('ROLE_ADMIN')") on RestControllers. */
-//    @EnableGlobalMethodSecurity(prePostEnabled = true)
-//    private static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {
-//        public GlobalSecurityConfiguration() {}
-//
-//        @Override
-//        protected MethodSecurityExpressionHandler createExpressionHandler() {
-//            return new OAuth2MethodSecurityExpressionHandler();
-//        }
-//    }
+    /**
+     * For enabling annotations like @PreAuthorize("hasAnyRole('ROLE_ADMIN')") on RestControllers.
+     */
+    //    @EnableGlobalMethodSecurity(prePostEnabled = true)
+    //    private static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration
+    // {
+    //        public GlobalSecurityConfiguration() {}
+    //
+    //        @Override
+    //        protected MethodSecurityExpressionHandler createExpressionHandler() {
+    //            return new OAuth2MethodSecurityExpressionHandler();
+    //        }
+    //    }
 }
