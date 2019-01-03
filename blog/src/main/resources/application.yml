@@ -1,0 +1,6 @@
+logging:
+  level:
+    root: WARN
+    springframework.web: WARN
+    org.hibernate: ERROR
+    com.example.blog: TRACE
