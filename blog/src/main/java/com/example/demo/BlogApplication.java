@@ -14,7 +14,7 @@ public class BlogApplication implements CommandLineRunner {
     @Autowired PostManagement postManagement;
 
     public static void main(String[] args) {
-        SpringApplication.run(ShopApplication.class, args);
+        SpringApplication.run(BlogApplication.class, args);
     }
 
     @Override
